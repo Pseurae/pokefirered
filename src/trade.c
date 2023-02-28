@@ -757,8 +757,8 @@ static const u8 sDebug_Messages[][13] = {
     _("ポケモンアイコンセット"), // "pokemon icon set"
     _("OBJテキストセット"), // "OBJ text set"
     _("セルセット"), // "cell set"
-    _("OBJテキストADD"), // "OBJ text ADD"
-    _("システムメッセージADD"), // "system message ADD"
+    _("OBJテキストAdd"), // "OBJ text ADD"
+    _("システムメッセージAdd"), // "system message ADD"
     _("はいけいセット"), // "background set"
 };
 
