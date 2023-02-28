@@ -207,6 +207,8 @@ u8 CheckIfItemIsTMHMOrEvolutionStone(u16 itemId)
         return 1;
     else if (ItemId_GetFieldFunc(itemId) == FieldUseFunc_EvoItem)
         return 2;
+    else if (itemId == ITEM_LINKING_CORD)
+        return 3;
     else
         return 0;
 }
@@ -908,6 +910,12 @@ void FieldUseFunc_OakStopsYou(u8 taskId)
     }
     else
         PrintNotTheTimeToUseThat(taskId, gTasks[taskId].data[3]);
+}
+
+void FieldUseFunc_LinkingCord(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_LinkingCord;
+    DoSetUpItemUseCallback(taskId);
 }
 
 void ItemUse_SetQuestLogEvent(u8 eventId, struct Pokemon *pokemon, u16 itemId, u16 param)

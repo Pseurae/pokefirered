@@ -596,6 +596,7 @@ void TrySetObtainedItemQuestLogEvent(u16 itemId)
      || itemId == ITEM_POWDER_JAR
      || itemId == ITEM_RUBY
      || itemId == ITEM_SAPPHIRE
+     || itemId == ITEM_LINKING_CORD
     )
     {
         if (itemId != ITEM_TOWN_MAP || (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(PALLET_TOWN_RIVALS_HOUSE) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(PALLET_TOWN_RIVALS_HOUSE)))
