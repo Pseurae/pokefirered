@@ -49,6 +49,7 @@ struct BagMenuAlloc
     u8 nItems[3];
     u8 maxShowed[3];
     u8 data[4];
+    u8 tmCount;
 };
 
 struct BagSlots
@@ -705,15 +706,16 @@ static u16 GetTMCount(void)
 {
     struct BagPocket * pocket = &gBagPockets[POCKET_TM_CASE - 1];
     u16 i = 0;
+    u16 j = 0;
 
     BagPocketCompaction(pocket->itemSlots, pocket->capacity);
     for (i = 0; i < pocket->capacity; i++)
     {
         u16 itemId = pocket->itemSlots[i].itemId;
-        if (!IS_TM(itemId))
-            break;
+        if (IS_TM(itemId))
+            ++j;
     }
-    return i;
+    return j;
 }
 
 static const u8 sText_Slash50[] = _("/50");
@@ -746,9 +748,12 @@ static void BagListMenuItemPrintFunc(u8 windowId, u32 itemId, u8 y)
 
         if (bagItemId == ITEM_TM_CASE)
         {
-            ConvertIntToDecimalStringN(gStringVar1, GetTMCount(), STR_CONV_MODE_RIGHT_ALIGN, 3);
+            ConvertIntToDecimalStringN(gStringVar1, sBagMenuDisplay->tmCount, STR_CONV_MODE_RIGHT_ALIGN, 3);
             StringAppend(gStringVar1, sText_Slash50);
-            BagPrintTextOnWindow(windowId, FONT_SMALL, gStringVar1, 80, y, 0, 0, 0xFF, 1);
+            if (gSaveBlock1Ptr->registeredItem != ITEM_NONE && gSaveBlock1Ptr->registeredItem == bagItemId)
+                BagPrintTextOnWindow(windowId, FONT_SMALL, gStringVar1, 80, y, 0, 0, 0xFF, 1);
+            else
+                BagPrintTextOnWindow(windowId, FONT_SMALL, gStringVar1, 106, y, 0, 0, 0xFF, 1);
         }
     }
 }
@@ -1044,6 +1049,8 @@ static void All_CalculateNItemsAndMaxShowed(void)
     u8 i;
     for (i = 0; i < 3; i++)
         Pocket_CalculateNItemsAndMaxShowed(i);
+
+    sBagMenuDisplay->tmCount = GetTMCount();
 }
 
 void DisplayItemMessageInBag(u8 taskId, u8 fontId, const u8 * string, TaskFunc followUpFunc)
