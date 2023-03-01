@@ -699,6 +699,25 @@ static void BagListMenuMoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMe
     }
 }
 
+#define IS_TM(itemId) (itemId >= ITEM_TM01 && itemId <= ITEM_TM50)
+
+static u16 GetTMCount(void)
+{
+    struct BagPocket * pocket = &gBagPockets[POCKET_TM_CASE - 1];
+    u16 i = 0;
+
+    BagPocketCompaction(pocket->itemSlots, pocket->capacity);
+    for (i = 0; i < pocket->capacity; i++)
+    {
+        u16 itemId = pocket->itemSlots[i].itemId;
+        if (!IS_TM(itemId))
+            break;
+    }
+    return i;
+}
+
+static const u8 sText_Slash50[] = _("/50");
+
 static void BagListMenuItemPrintFunc(u8 windowId, u32 itemId, u8 y)
 {
     u16 bagItemId;
@@ -723,6 +742,13 @@ static void BagListMenuItemPrintFunc(u8 windowId, u32 itemId, u8 y)
         else if (gSaveBlock1Ptr->registeredItem != ITEM_NONE && gSaveBlock1Ptr->registeredItem == bagItemId)
         {
             BlitBitmapToWindow(windowId, sBlit_SelectButton, 0x70, y, 0x18, 0x10);
+        }
+
+        if (bagItemId == ITEM_TM_CASE)
+        {
+            ConvertIntToDecimalStringN(gStringVar1, GetTMCount(), STR_CONV_MODE_RIGHT_ALIGN, 3);
+            StringAppend(gStringVar1, sText_Slash50);
+            BagPrintTextOnWindow(windowId, FONT_SMALL, gStringVar1, 80, y, 0, 0, 0xFF, 1);
         }
     }
 }
@@ -1399,18 +1425,18 @@ static void OpenContextMenu(u8 taskId)
                 break;
             case OPEN_BAG_KEYITEMS:
                 sContextMenuItemsPtr = sContextMenuItemsBuffer;
-                sContextMenuNumItems = 3;
-                sContextMenuItemsBuffer[2] = ITEMMENUACTION_CANCEL;
-                if (gSaveBlock1Ptr->registeredItem == gSpecialVar_ItemId)
-                    sContextMenuItemsBuffer[1] = ITEMMENUACTION_DESELECT;
-                else
-                    sContextMenuItemsBuffer[1] = ITEMMENUACTION_REGISTER;
+                sContextMenuNumItems = 0;
                 if (gSpecialVar_ItemId == ITEM_TM_CASE || gSpecialVar_ItemId == ITEM_BERRY_POUCH)
-                    sContextMenuItemsBuffer[0] = ITEMMENUACTION_OPEN;
+                    sContextMenuItemsBuffer[sContextMenuNumItems++] = ITEMMENUACTION_OPEN;
                 else if (gSpecialVar_ItemId == ITEM_BICYCLE && TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_ACRO_BIKE | PLAYER_AVATAR_FLAG_MACH_BIKE))
-                    sContextMenuItemsBuffer[0] = ITEMMENUACTION_WALK;
+                    sContextMenuItemsBuffer[sContextMenuNumItems++] = ITEMMENUACTION_WALK;
                 else
-                    sContextMenuItemsBuffer[0] = ITEMMENUACTION_USE;
+                    sContextMenuItemsBuffer[sContextMenuNumItems++] = ITEMMENUACTION_USE;
+                if (gSaveBlock1Ptr->registeredItem == gSpecialVar_ItemId)
+                    sContextMenuItemsBuffer[sContextMenuNumItems++] = ITEMMENUACTION_DESELECT;
+                else
+                    sContextMenuItemsBuffer[sContextMenuNumItems++] = ITEMMENUACTION_REGISTER;
+                sContextMenuItemsBuffer[sContextMenuNumItems++] = ITEMMENUACTION_CANCEL;
                 break;
             case OPEN_BAG_POKEBALLS:
                 sContextMenuItemsPtr = sContextMenuItems_Field[gBagMenuState.pocket];
