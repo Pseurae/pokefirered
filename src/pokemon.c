@@ -1353,7 +1353,7 @@ static const struct SpindaSpot sSpindaSpotGraphics[] =
 
 #include "data/pokemon/item_effects.h"
 
-static const s8 sNatureStatTable[][5] =
+const s8 gNatureStatTable[][5] =
 {
     // Atk Def Spd Sp.Atk Sp.Def
     {    0,  0,  0,     0,     0}, // Hardy
@@ -5252,7 +5252,7 @@ static u16 ModifyStatByNature(u8 nature, u16 n, u8 statIndex)
         return retVal;
     }
 
-    switch (sNatureStatTable[nature][statIndex - 1])
+    switch (gNatureStatTable[nature][statIndex - 1])
     {
     case 1:
         return (u16)(n * 110) / 100;
