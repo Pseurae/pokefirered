@@ -28,7 +28,7 @@ SSAnne_2F_Corridor_Text_RivalVictory::
 
 SSAnne_2F_Corridor_Text_RivalPostBattle::
     .string "{RIVAL}: I heard there was a Cut\n"
-    .string "master on board.\p"
+    .string "Master on board.\p"
     .string "But he was just a seasick old man!\p"
     .string "Cut itself is really useful.\n"
     .string "Yup, it'll be handy.\p"

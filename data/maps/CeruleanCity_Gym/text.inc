@@ -18,7 +18,7 @@ CeruleanCity_Gym_Text_ExplainCascadeBadge::
     .string "got in trades.\p"
     .string "There's more. You can now use Cut\n"
     .string "anytime, even out of battle.\p"
-    .string "You can Cut down small trees to\n"
+    .string "You can cut down small trees to\n"
     .string "open new pathways.\p"
     .string "You can also have my favorite TM.$"
 

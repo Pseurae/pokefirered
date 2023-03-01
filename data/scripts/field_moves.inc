@@ -45,15 +45,15 @@ EventScript_DontCutTree::
 	end
 
 Text_CutTreeDown::
-	.string "This tree looks like it can be Cut\n"
+	.string "This tree looks like it can be cut\n"
 	.string "down!\p"
-	.string "Would you like to Cut it?$"
+	.string "Would you like to cut it?$"
 
 Text_MonUsedMove::
 	.string "{STR_VAR_1} used {STR_VAR_2}!$"
 
 Text_TreeCanBeCutDown::
-	.string "This tree looks like it can be Cut\n"
+	.string "This tree looks like it can be cut\n"
 	.string "down!$"
 
 EventScript_RockSmash::
