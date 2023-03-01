@@ -397,6 +397,7 @@ static void ItemUseCB_RestorePP(u8 taskId, TaskFunc func);
 static void ItemUseCB_ReplaceMoveWithTMHM(u8 taskId, TaskFunc func);
 static void Task_ReplaceMoveWithTMHM(u8 taskId);
 static void CB2_UseEvolutionStone(void);
+static void CB2_UseLinkingCord(void);
 static bool8 MonCanEvolve(void);
 
 static EWRAM_DATA struct PartyMenuInternal *sPartyMenuInternal = NULL;
@@ -4279,7 +4280,12 @@ static void Task_DoUseItemAnim(u8 taskId)
 
 static void CB2_DoUseItemAnim(void)
 {
-    if (CheckIfItemIsTMHMOrEvolutionStone(gSpecialVar_ItemId) == 2) // Evolution stone
+    u8 mode = CheckIfItemIsTMHMOrEvolutionStone(gSpecialVar_ItemId);
+    if (mode == 3) // Linking Cord 
+    {
+        StartUseItemAnim_Normal(gPartyMenu.slotId, gSpecialVar_ItemId, CB2_UseLinkingCord);
+    }
+    else if (mode == 2) // Evolution stone
     {
         if (MonCanEvolve() == TRUE)
             StartUseItemAnim_Normal(gPartyMenu.slotId, gSpecialVar_ItemId, CB2_UseEvolutionStone);
@@ -5328,14 +5334,35 @@ static void CB2_UseEvolutionStone(void)
 
 void ItemUseCB_LinkingCord(u8 taskId, TaskFunc func)
 {
+    bool8 noEffect;
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     u16 targetSpecies = GetEvolutionTargetSpecies(mon, EVO_MODE_TRADE, ITEM_NONE);
 
+    PlaySE(SE_SELECT);
+    if (targetSpecies == SPECIES_NONE)
+    {
+        gPartyMenuUseExitCallback = FALSE;
+        DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        gTasks[taskId].func = func;
+    }
+    else
+    {
+        Task_DoUseItemAnim(taskId);
+    }
+}
+
+static void CB2_UseLinkingCord(void)
+{
+    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+    u16 targetSpecies = GetEvolutionTargetSpecies(mon, EVO_MODE_TRADE, ITEM_NONE);
+
+    gCB2_AfterEvolution = gPartyMenu.exitCallback;
+
     if (targetSpecies != SPECIES_NONE)
     {
-        FreePartyPointers();
-        gCB2_AfterEvolution = gPartyMenu.exitCallback;
-        BeginEvolutionScene(mon, targetSpecies, TRUE, gPartyMenu.slotId);
+        ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, &gPlayerParty[gPartyMenu.slotId], gSpecialVar_ItemId, 0xFFFF);
+        BeginEvolutionScene(mon, targetSpecies, 0, gPartyMenu.slotId);
     }
 }
 

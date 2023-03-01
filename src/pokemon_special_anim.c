@@ -247,7 +247,7 @@ static void Task_UseItem_Normal(u8 taskId)
     case 12:
         if (JOY_NEW(A_BUTTON | B_BUTTON))
         {
-            if (CheckIfItemIsTMHMOrEvolutionStone(ptr->itemId) != 2) // evo stone
+            if (CheckIfItemIsTMHMOrEvolutionStone(ptr->itemId) < 2) // evo stone or linking cord
             {
                 BeginNormalPaletteFade(PALETTES_ALL, -1, 0, 16, RGB_BLACK);
                 ptr->state++;
