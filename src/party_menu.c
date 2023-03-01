@@ -2999,24 +2999,73 @@ static void SetPartyMonSelectionActions(struct Pokemon *mons, u8 slotId, u8 acti
     }
 }
 
+static bool8 CheckIfMonCanUseHM(struct Pokemon *mon, u16 hm)
+{
+    if ((CheckBagHasItem(hm, 1) && CanMonLearnTMHM(mon, hm - ITEM_TM01_FOCUS_PUNCH)) || 
+        (MonKnowsMove(mon, ItemIdToBattleMoveId(hm)) == TRUE))
+        return TRUE;
+
+    return FALSE;
+}
+
+static u8 GetLearnsetFieldMoveFlags(struct Pokemon *mon)
+{
+    u8 i = 0, ret = 0;
+    u16 species = GetMonData(mon, MON_DATA_SPECIES2);
+    const u16 *learnset = gLevelUpLearnsets[species];
+
+    while (learnset[i] != 0xFFFF)
+    {
+        u8 j;
+
+        for (j = FIELD_MOVE_TELEPORT; j < FIELD_MOVE_END; ++j)
+        {
+            if (sFieldMoves[j] == (learnset[i] & 0x1FF))
+            {
+                ret |= (1 << (j - FIELD_MOVE_TELEPORT));
+                break;
+            }
+        }
+
+        ++i;
+    }
+
+    return ret;
+}
+
+static void SetPartyMonFieldMoveActions(struct Pokemon *mon)
+{
+    u8 i, flags = GetLearnsetFieldMoveFlags(mon);
+    u16 species = GetMonData(mon, MON_DATA_SPECIES2, NULL);
+
+    if (!species || species == SPECIES_EGG)
+        return;
+
+    if (CheckIfMonCanUseHM(mon, ITEM_HM05_FLASH))
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_FIELD_MOVES + FIELD_MOVE_FLASH);
+
+    if (CheckIfMonCanUseHM(mon, ITEM_HM02_FLY))
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_FIELD_MOVES + FIELD_MOVE_FLY);
+
+    for (i = 0; i < FIELD_MOVE_END - FIELD_MOVE_TELEPORT; ++i)
+    {
+        if (flags & (1 << i))
+        {
+            AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_FIELD_MOVES + FIELD_MOVE_TELEPORT + i);
+        }
+    }
+}
+
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
     u8 i, j;
 
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_SUMMARY);
+
     // Add field moves to action list
-    for (i = 0; i < MAX_MON_MOVES; ++i)
-    {
-        for (j = 0; sFieldMoves[j] != FIELD_MOVE_END; ++j)
-        {
-            if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) == sFieldMoves[j])
-            {
-                AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + CURSOR_OPTION_FIELD_MOVES);
-                break;
-            }
-        }
-    }
+    SetPartyMonFieldMoveActions(&mons[slotId]);
+
     if (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE)
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_SWITCH);
     if (ItemIsMail(GetMonData(&mons[slotId], MON_DATA_HELD_ITEM)))

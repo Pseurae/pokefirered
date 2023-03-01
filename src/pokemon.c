@@ -5567,6 +5567,29 @@ u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm)
     }
 }
 
+u32 CanMonLearnByLvl(struct Pokemon *mon, u16 move)
+{
+    u8 i = 0;
+    const u16 *learnset;
+
+    u16 species = GetMonData(mon, MON_DATA_SPECIES2, NULL);
+    if (species == SPECIES_EGG)
+    {
+        return 0;
+    }
+
+    learnset = gLevelUpLearnsets[species];
+
+    while (learnset[i] != LEVEL_UP_END)
+    {
+        if (move == (learnset[i] & 0x1FF))
+            return 1;
+        i++;
+    }
+
+    return 0;
+}
+
 u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
 {
     u16 learnedMoves[4];

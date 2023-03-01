@@ -2249,3 +2249,30 @@ bool8 ScrCmd_setmonmetlocation(struct ScriptContext * ctx)
         SetMonData(&gPlayerParty[partyIndex], MON_DATA_MET_LOCATION, &location);
     return FALSE;
 }
+
+bool8 ScrCmd_checkifpartycanusetm(struct ScriptContext *ctx)
+{
+    u8 i;
+    u16 hm = VarGet(ScriptReadHalfword(ctx));
+
+    if (hm < ITEM_TM01 || hm > ITEM_HM08)
+        return FALSE;
+
+    gSpecialVar_Result = PARTY_SIZE;
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2, NULL);
+        if (!species || species == SPECIES_EGG)
+            break;
+
+        if ((CheckBagHasItem(hm, 1) && CanMonLearnTMHM(&gPlayerParty[i], hm - ITEM_TM01_FOCUS_PUNCH)) || 
+            (MonKnowsMove(&gPlayerParty[i], ItemIdToBattleMoveId(hm)) == TRUE))
+        {
+            gSpecialVar_Result = i;
+            gSpecialVar_0x8004 = species;
+            break;
+        }
+    }
+
+    return FALSE;
+}

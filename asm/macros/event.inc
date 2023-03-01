@@ -1633,6 +1633,11 @@
 	.2byte \quantity
 	.endm
 
+	.macro checkifpartycanusetm tm:req
+	.byte 0xd5
+	.2byte \tm
+	.endm
+
 
 @ Supplementary
 
