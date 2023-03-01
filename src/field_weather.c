@@ -162,7 +162,7 @@ void StartWeather(void)
         gWeatherPtr->sandstormSwirlSpritesCreated = FALSE;
         gWeatherPtr->bubblesSpritesCreated = FALSE;
         gWeatherPtr->lightenedFogSpritePalsCount = 0;
-        Weather_SetBlendCoeffs(7, 11);
+        Weather_SetBlendCoeffs(16, 0);
         gWeatherPtr->currWeather = WEATHER_NONE;
         gWeatherPtr->palProcessingState = WEATHER_PAL_STATE_IDLE;
         gWeatherPtr->readyForInit = FALSE;
@@ -244,6 +244,7 @@ static void None_Init(void)
 {
     gWeatherPtr->gammaTargetIndex = 0;
     gWeatherPtr->gammaStepDelay = 0;
+    Weather_SetBlendCoeffs(9, 12);
 }
 
 static void None_Main(void)

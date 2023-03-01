@@ -130,6 +130,7 @@ void Sunny_InitVars(void)
 {
     gWeatherPtr->gammaTargetIndex = 0;
     gWeatherPtr->gammaStepDelay = 20;
+    Weather_SetBlendCoeffs(7, 11);
 }
 
 void Sunny_InitAll(void)
@@ -2171,6 +2172,7 @@ void Shade_InitVars(void)
     gWeatherPtr->initStep = 0;
     gWeatherPtr->gammaTargetIndex = 3;
     gWeatherPtr->gammaStepDelay = 20;
+    Weather_SetBlendCoeffs(8, 12);
 }
 
 void Shade_InitAll(void)

@@ -8266,6 +8266,7 @@ static bool8 IsSuitableWeatherForShadow(void)
     {
         case WEATHER_NONE:
         case WEATHER_SUNNY:
+        case WEATHER_SHADE:
             return TRUE;
     }
 
