@@ -440,7 +440,7 @@ static void IntrDummy(void)
 static void WaitForVBlank(void)
 {
     gMain.intrCheck &= ~INTR_FLAG_VBLANK;
-    VBlankIntrWait();
+    asm("swi 0x5");
 }
 
 void SetVBlankCounter1Ptr(u32 *ptr)
