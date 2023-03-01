@@ -620,6 +620,10 @@ static void BuyMenuPrintPriceInList(u8 windowId, u32 item, u8 y)
         while (x-- != 0)
             *loc++ = 0;
         StringExpandPlaceholders(loc, gText_PokedollarVar1);
+        if (ItemId_GetPocket(item) == POCKET_TM_CASE && (CheckBagHasItem(item, 1) || CheckPCHasItem(item, 1)))
+            StringCopy(loc, gText_SoldOut2);
+        else
+            StringExpandPlaceholders(loc, gText_PokedollarVar1);
         BuyMenuPrint(windowId, FONT_SMALL, gStringVar4, 0x69, y, 0, 0, TEXT_SKIP_DRAW, 1);
     }
 }
@@ -879,6 +883,8 @@ static void BuyMenuPrintItemQuantityAndPrice(u8 taskId)
     BuyMenuPrint(3, FONT_SMALL, gStringVar4, 2, 0xA, 0, 0, 0, 1);
 }
 
+extern const u8 gText_YouWantedVar1ThatllBeVar2[];
+
 static void Task_BuyMenu(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
@@ -903,7 +909,22 @@ static void Task_BuyMenu(u8 taskId)
             BuyMenuPrintCursor(tListTaskId, 2);
             RecolorItemDescriptionBox(1);
             gShopData.itemPrice = ItemId_GetPrice(itemId);
-            if (!IsEnoughMoney(&gSaveBlock1Ptr->money, gShopData.itemPrice))
+            if (ItemId_GetPocket(itemId) == POCKET_TM_CASE )
+            {
+                if (CheckBagHasItem(itemId, 1) || CheckPCHasItem(itemId, 1))
+                {
+                    BuyMenuDisplayMessage(taskId, gText_SoldOut, BuyMenuReturnToItemList);
+                }
+                else
+                {
+                    ConvertIntToDecimalStringN(gStringVar2, gShopData.itemPrice, STR_CONV_MODE_LEFT_ALIGN, 6);
+                    StringExpandPlaceholders(gStringVar4, gText_YouWantedVar1ThatllBeVar2);
+                    tItemCount = 1;
+                    gShopData.itemPrice = (ItemId_GetPrice(tItemId)) * tItemCount;
+                    BuyMenuDisplayMessage(taskId, gStringVar4, CreateBuyMenuConfirmPurchaseWindow);
+                }
+            }
+            else if (!IsEnoughMoney(&gSaveBlock1Ptr->money, gShopData.itemPrice))
             {
                 BuyMenuDisplayMessage(taskId, gText_YouDontHaveMoney, BuyMenuReturnToItemList);
             }
@@ -993,9 +1014,10 @@ static void BuyMenuTryMakePurchase(u8 taskId)
     PutWindowTilemap(4);
     if (AddBagItem(tItemId, tItemCount) == TRUE)
     {
-        BuyMenuDisplayMessage(taskId, gText_HereYouGoThankYou, BuyMenuSubtractMoney);
+        RedrawListMenu(tListTaskId);
         DebugFunc_PrintPurchaseDetails(taskId);
         RecordItemPurchase(tItemId, tItemCount, 1);
+        BuyMenuDisplayMessage(taskId, gText_HereYouGoThankYou, BuyMenuSubtractMoney);
     }
     else
     {
