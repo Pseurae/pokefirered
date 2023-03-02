@@ -603,7 +603,7 @@ static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, s
     {
         FillWindowPixelBuffer(6, PIXEL_FILL(0));
         LoadTmHmNameInMart(item);
-        BuyMenuPrint(5, FONT_NORMAL, description, 2, 3, 1, 0, 0, 0);
+        BuyMenuPrint(5, FONT_NORMAL, description, 4, 3, 1, 0, 0, 0);
     }
 }
 
@@ -615,16 +615,16 @@ static void BuyMenuPrintPriceInList(u8 windowId, u32 item, u8 y)
     if (item != INDEX_CANCEL)
     {
         ConvertIntToDecimalStringN(gStringVar1, ItemId_GetPrice(item), 0, 4);
-        x = 4 - StringLength(gStringVar1);
-        loc = gStringVar4;
-        while (x-- != 0)
-            *loc++ = 0;
-        StringExpandPlaceholders(loc, gText_PokedollarVar1);
         if (ItemId_GetPocket(item) == POCKET_TM_CASE && (CheckBagHasItem(item, 1) || CheckPCHasItem(item, 1)))
-            StringCopy(loc, gText_SoldOut2);
+        {
+            StringCopy(gStringVar4, gText_AlreadyOwn2);
+        }
         else
-            StringExpandPlaceholders(loc, gText_PokedollarVar1);
-        BuyMenuPrint(windowId, FONT_SMALL, gStringVar4, 0x69, y, 0, 0, TEXT_SKIP_DRAW, 1);
+        {
+            StringExpandPlaceholders(gStringVar4, gText_PokedollarVar1);
+        }
+        x = 136 - GetStringWidth(FONT_SMALL, gStringVar4, 0);
+        BuyMenuPrint(windowId, FONT_SMALL, gStringVar4, x, y, 0, 0, TEXT_SKIP_DRAW, 1);
     }
 }
 
@@ -913,10 +913,11 @@ static void Task_BuyMenu(u8 taskId)
             {
                 if (CheckBagHasItem(itemId, 1) || CheckPCHasItem(itemId, 1))
                 {
-                    BuyMenuDisplayMessage(taskId, gText_SoldOut, BuyMenuReturnToItemList);
+                    BuyMenuDisplayMessage(taskId, gText_AlreadyOwn, BuyMenuReturnToItemList);
                 }
                 else
                 {
+                    CopyItemName(itemId, gStringVar1);
                     ConvertIntToDecimalStringN(gStringVar2, gShopData.itemPrice, STR_CONV_MODE_LEFT_ALIGN, 6);
                     StringExpandPlaceholders(gStringVar4, gText_YouWantedVar1ThatllBeVar2);
                     tItemCount = 1;
