@@ -453,4 +453,5 @@ gSpecials::
 	def_special LoopWingFlapSound
 	def_special CreateEventLegalEnemyMon
 	def_special CanTradeEvolveMon
+	def_special TryDrawRepelMenu
 gSpecialsEnd::

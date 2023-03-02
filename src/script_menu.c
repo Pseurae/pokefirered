@@ -6,6 +6,7 @@
 #include "quest_log.h"
 #include "new_menu_helpers.h"
 #include "event_data.h"
+#include "item.h"
 #include "script.h"
 #include "strings.h"
 #include "field_effect.h"
@@ -13,6 +14,7 @@
 #include "constants/songs.h"
 #include "constants/seagallop.h"
 #include "constants/menu.h"
+#include "constants/items.h"
 
 #define GFXTAG_FOSSIL 7000
 
@@ -704,22 +706,18 @@ bool8 ScriptMenu_MultichoiceWithDefault(u8 left, u8 top, u8 mcId, u8 ignoreBpres
     return TRUE;
 }
 
-static void DrawVerticalMultichoiceMenu(u8 left, u8 top, u8 mcId, u8 ignoreBpress, u8 initPos)
+static void DrawVerticalMultichoiceMenuInternal(u8 left, u8 top, u8 mcId, u8 ignoreBpress, u8 initPos, u8 count, const struct MenuAction *list)
 {
     s32 i;
     s32 strWidth;
     s32 tmp;
     u8 width;
     u8 height;
-    u8 count;
     u8 windowId;
-    const struct MenuAction * list;
 
     if ((ignoreBpress & 2) || QuestLog_SchedulePlaybackCB(QLPlaybackCB_DestroyScriptMenuMonPicSprites) != TRUE)
     {
         ignoreBpress &= 1;
-        count = sMultichoiceLists[mcId].count;
-        list = sMultichoiceLists[mcId].list;
         strWidth = 0;
         for (i = 0; i < count; i++)
         {
@@ -733,16 +731,16 @@ static void DrawVerticalMultichoiceMenu(u8 left, u8 top, u8 mcId, u8 ignoreBpres
         height = GetMCWindowHeight(count);
         windowId = CreateWindowFromRect(left, top, width, height);
         SetStdWindowBorderStyle(windowId, FALSE);
-        if (mcId == MULTICHOICE_GAME_CORNER_TMPRIZES
-         || mcId == MULTICHOICE_BIKE_SHOP
-         || mcId == MULTICHOICE_GAME_CORNER_BATTLE_ITEM_PRIZES)
-            MultichoiceList_PrintItems(windowId, FONT_NORMAL, 8, 2, 14, count, list, 0, 2);
-        else
-            MultichoiceList_PrintItems(windowId, FONT_NORMAL, 8, 2, 14, count, list, 0, 2);
+        MultichoiceList_PrintItems(windowId, FONT_NORMAL, 8, 2, 14, count, list, 0, 2);
         Menu_InitCursor(windowId, FONT_NORMAL, 0, 2, 14, count, initPos);
         CreateMCMenuInputHandlerTask(ignoreBpress, count, windowId, mcId);
         ScheduleBgCopyTilemapToVram(0);
     }
+}
+
+static void DrawVerticalMultichoiceMenu(u8 left, u8 top, u8 mcId, u8 ignoreBpress, u8 initPos)
+{
+    DrawVerticalMultichoiceMenuInternal(left, top, mcId, ignoreBpress, initPos, sMultichoiceLists[mcId].count, sMultichoiceLists[mcId].list);
 }
 
 static u8 GetMCWindowHeight(u8 count)
@@ -1326,4 +1324,33 @@ u16 GetSelectedSeagallopDestination(void)
             return gSpecialVar_Result;
     }
     return SEAGALLOP_VERMILION_CITY;
+}
+
+static const u16 sRepelItems[] = { ITEM_REPEL, ITEM_SUPER_REPEL, ITEM_MAX_REPEL };
+
+void TryDrawRepelMenu(void)
+{
+    struct MenuAction menuItems[4] = {NULL};
+    int i, count = 0;
+
+    for (i = 0; i < ARRAY_COUNT(sRepelItems); i++)
+    {
+        if (CheckBagHasItem(sRepelItems[i], 1))
+        {
+            VarSet(VAR_0x8004 + count, sRepelItems[i]);
+            menuItems[count].text = ItemId_GetName(sRepelItems[i]);
+            count++;
+        }
+    }
+
+    if (count > 1)
+        DrawVerticalMultichoiceMenuInternal(0, 0, 0, FALSE, 0, count, menuItems);
+
+    gSpecialVar_Result = (count > 1);
+}
+
+void HandleRepelMenuChoice(void)
+{
+    gSpecialVar_0x8004 = VarGet(VAR_0x8004 + gSpecialVar_Result); // Get item Id;
+    VarSet(VAR_REPEL_STEP_COUNT, ItemId_GetHoldEffectParam(gSpecialVar_0x8004));
 }
