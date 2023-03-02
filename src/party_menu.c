@@ -3033,6 +3033,8 @@ static u8 GetLearnsetFieldMoveFlags(struct Pokemon *mon)
     return ret;
 }
 
+#define FLAG_BIT(i) ((1 << (i - FIELD_MOVE_TELEPORT)))
+
 static void SetPartyMonFieldMoveActions(struct Pokemon *mon)
 {
     u8 i, flags = GetLearnsetFieldMoveFlags(mon);
@@ -3041,20 +3043,29 @@ static void SetPartyMonFieldMoveActions(struct Pokemon *mon)
     if (!species || species == SPECIES_EGG)
         return;
 
-    if (CheckIfMonCanUseHM(mon, ITEM_HM05_FLASH))
+    if (gMapHeader.cave && CheckIfMonCanUseHM(mon, ITEM_HM05_FLASH))
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_FIELD_MOVES + FIELD_MOVE_FLASH);
 
-    if (CheckIfMonCanUseHM(mon, ITEM_HM02_FLY))
+    if (Overworld_MapTypeAllowsTeleportAndFly(gMapHeader.mapType) && CheckIfMonCanUseHM(mon, ITEM_HM02_FLY))
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_FIELD_MOVES + FIELD_MOVE_FLY);
 
-    for (i = 0; i < FIELD_MOVE_END - FIELD_MOVE_TELEPORT; ++i)
-    {
-        if (flags & (1 << i))
-        {
-            AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_FIELD_MOVES + FIELD_MOVE_TELEPORT + i);
-        }
-    }
+    if (Overworld_MapTypeAllowsTeleportAndFly(gMapHeader.mapType) && flags & FLAG_BIT(FIELD_MOVE_TELEPORT))
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_FIELD_MOVES + FIELD_MOVE_TELEPORT);
+    
+    if (CanUseEscapeRopeOnCurrMap() && flags & FLAG_BIT(FIELD_MOVE_DIG))
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_FIELD_MOVES + FIELD_MOVE_DIG);
+
+    if (flags & FLAG_BIT(FIELD_MOVE_MILK_DRINK))
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_FIELD_MOVES + FIELD_MOVE_MILK_DRINK);
+
+    if (flags & FLAG_BIT(FIELD_MOVE_SOFT_BOILED))
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_FIELD_MOVES + FIELD_MOVE_SOFT_BOILED);
+
+    if (flags & FLAG_BIT(FIELD_MOVE_SWEET_SCENT))
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, CURSOR_OPTION_FIELD_MOVES + FIELD_MOVE_SWEET_SCENT);
 }
+
+#undef FLAG_BIT
 
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {

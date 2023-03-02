@@ -2555,3 +2555,27 @@ static void Task_WingFlapSound(u8 taskId)
     if (data[0] == gSpecialVar_0x8004 - 1)
         DestroyTask(taskId);
 }
+
+extern struct Evolution gEvolutionTable[][EVOS_PER_MON];
+
+static bool8 DoesSpeciesHaveTradeEvolution(u16 species)
+{
+    u8 i;
+    for (i = 0; i < 5; i++)
+    {
+        switch (gEvolutionTable[species][i].method)
+        {
+        case EVO_TRADE:
+        case EVO_TRADE_ITEM:
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+void CanTradeEvolveMon(void)
+{
+    u16 species = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES2);
+    gSpecialVar_Result = DoesSpeciesHaveTradeEvolution(species);
+}

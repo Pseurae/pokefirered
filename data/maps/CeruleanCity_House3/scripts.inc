@@ -5,6 +5,34 @@ CeruleanCity_House3_EventScript_OldWoman::
 	msgbox CeruleanCity_House3_Text_PleaseTradeWithMyHusband, MSGBOX_NPC
 	end
 
+CeruleanCity_House3_EventScript_Lass::
+	lock
+	faceplayer
+	goto_if_set FLAG_GOT_LINKING_CORD, CeruleanCity_House3_EventScript_ExplainLinkingCord
+	msgbox CeruleanCity_House3_Text_TradeEvolution, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, CeruleanCity_House3_EventScript_DeclinePokeShow
+	special ChoosePartyMon
+	waitstate
+	goto_if_ge VAR_0x8004, PARTY_SIZE, CeruleanCity_House3_EventScript_DeclinePokeShow
+	special CanTradeEvolveMon
+	goto_if_eq VAR_RESULT, FALSE, CeruleanCity_House3_EventScript_DeclinePokeShow
+	msgbox CeruleanCity_House3_Text_HereYouGo, MSGBOX_DEFAULT
+	setflag FLAG_GOT_LINKING_CORD
+	giveitem ITEM_LINKING_CORD
+	call_if_eq VAR_RESULT, FALSE, EventScript_BagIsFull
+	msgbox CeruleanCity_House3_Text_ExplainLinkingCord, MSGBOX_NPC
+	release
+	end
+
+CeruleanCity_House3_EventScript_DeclinePokeShow::
+	msgbox CeruleanCity_House3_Text_ComeBack, MSGBOX_NPC
+	release
+	end
+
+CeruleanCity_House3_EventScript_ExplainLinkingCord::
+	msgbox CeruleanCity_House3_Text_ExplainLinkingCord, MSGBOX_NPC
+	end
+
 CeruleanCity_House3_EventScript_Dontae::
 	lock
 	faceplayer
