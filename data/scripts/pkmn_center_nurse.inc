@@ -43,6 +43,8 @@ EventScript_PkmnCenterNurse_ReturnPkmn::
 	applymovement VAR_LAST_TALKED, Movement_Bow
 	waitmovement 0
 	msgbox Text_WeHopeToSeeYouAgain
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceDown
+	waitmovement 0
 	return
 
 EventScript_PkmnCenterNurse_PlayerWaitingInUionRoom::
@@ -54,10 +56,14 @@ EventScript_PkmnCenterNurse_PlayerWaitingInUionRoom::
 	applymovement VAR_LAST_TALKED, Movement_Bow
 	waitmovement 0
 	msgbox Text_WeHopeToSeeYouAgain
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceDown
+	waitmovement 0
 	return
 
 EventScript_PkmnCenterNurse_Goodbye::
 	msgbox Text_WeHopeToSeeYouAgain
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceDown
+	waitmovement 0
 	return
 
 Movement_Bow::
