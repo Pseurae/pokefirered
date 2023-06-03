@@ -1,0 +1,20 @@
+Giga Drain:
+PP: 5 -> 10
+Power: 60 -> 75
+
+Mega Drain:
+PP: 10 -> 15
+
+Fly:
+Power: 70 -> 90
+
+Flash:
+Power: 50
+Accuracy: 95
+Type: Normal -> Steel
+
+Rock Smash:
+Power: 20 -> 40
+
+Cut:
+Type: Normal -> Bug
