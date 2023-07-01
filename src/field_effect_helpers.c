@@ -238,6 +238,12 @@ u32 FldEff_Shadow(void)
     return 0;
 }
 
+void SetUpShadow(struct ObjectEvent *objEvent)
+{
+    ObjectEventGetLocalIdAndMap(objEvent, (u8 *)&gFieldEffectArguments[0], (u8 *)&gFieldEffectArguments[1], (u8 *)&gFieldEffectArguments[2]);
+    FldEff_Shadow();
+}
+
 void UpdateShadowFieldEffect(struct Sprite *sprite)
 {
     u8 objectEventId;

@@ -5826,7 +5826,7 @@ static bool8 MovementAction_Jump2Down_Step1(struct ObjectEvent *objectEvent, str
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -5843,7 +5843,7 @@ static bool8 MovementAction_Jump2Up_Step1(struct ObjectEvent *objectEvent, struc
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -5860,7 +5860,7 @@ static bool8 MovementAction_Jump2Left_Step1(struct ObjectEvent *objectEvent, str
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -5877,7 +5877,7 @@ static bool8 MovementAction_Jump2Right_Step1(struct ObjectEvent *objectEvent, st
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -6820,7 +6820,7 @@ static bool8 MovementAction_JumpDown_Step1(struct ObjectEvent *objectEvent, stru
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -6837,7 +6837,7 @@ static bool8 MovementAction_JumpUp_Step1(struct ObjectEvent *objectEvent, struct
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -6854,7 +6854,7 @@ static bool8 MovementAction_JumpLeft_Step1(struct ObjectEvent *objectEvent, stru
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -6871,7 +6871,7 @@ static bool8 MovementAction_JumpRight_Step1(struct ObjectEvent *objectEvent, str
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -6888,7 +6888,7 @@ static bool8 MovementAction_JumpInPlaceDown_Step1(struct ObjectEvent *objectEven
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -6905,7 +6905,7 @@ static bool8 MovementAction_JumpInPlaceUp_Step1(struct ObjectEvent *objectEvent,
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -6922,7 +6922,7 @@ static bool8 MovementAction_JumpInPlaceLeft_Step1(struct ObjectEvent *objectEven
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -6939,7 +6939,7 @@ static bool8 MovementAction_JumpInPlaceRight_Step1(struct ObjectEvent *objectEve
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -6956,7 +6956,7 @@ static bool8 MovementAction_JumpInPlaceDownUp_Step1(struct ObjectEvent *objectEv
 {
     if (DoJumpInPlaceAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -6973,7 +6973,7 @@ static bool8 MovementAction_JumpInPlaceUpDown_Step1(struct ObjectEvent *objectEv
 {
     if (DoJumpInPlaceAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -6990,7 +6990,7 @@ static bool8 MovementAction_JumpInPlaceLeftRight_Step1(struct ObjectEvent *objec
 {
     if (DoJumpInPlaceAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7007,7 +7007,7 @@ static bool8 MovementAction_JumpInPlaceRightLeft_Step1(struct ObjectEvent *objec
 {
     if (DoJumpInPlaceAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7382,7 +7382,7 @@ static bool8 MovementAction_AcroWheelieHopFaceDown_Step1(struct ObjectEvent *obj
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7399,7 +7399,7 @@ static bool8 MovementAction_AcroWheelieHopFaceUp_Step1(struct ObjectEvent *objec
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7416,7 +7416,7 @@ static bool8 MovementAction_AcroWheelieHopFaceLeft_Step1(struct ObjectEvent *obj
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7433,7 +7433,7 @@ static bool8 MovementAction_AcroWheelieHopFaceRight_Step1(struct ObjectEvent *ob
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7450,7 +7450,7 @@ static bool8 MovementAction_AcroWheelieHopDown_Step1(struct ObjectEvent *objectE
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7467,7 +7467,7 @@ static bool8 MovementAction_AcroWheelieHopUp_Step1(struct ObjectEvent *objectEve
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7484,7 +7484,7 @@ static bool8 MovementAction_AcroWheelieHopLeft_Step1(struct ObjectEvent *objectE
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7501,7 +7501,7 @@ static bool8 MovementAction_AcroWheelieHopRight_Step1(struct ObjectEvent *object
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7518,7 +7518,7 @@ static bool8 MovementAction_AcroWheelieJumpDown_Step1(struct ObjectEvent *object
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7535,7 +7535,7 @@ static bool8 MovementAction_AcroWheelieJumpUp_Step1(struct ObjectEvent *objectEv
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7552,7 +7552,7 @@ static bool8 MovementAction_AcroWheelieJumpLeft_Step1(struct ObjectEvent *object
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -7569,7 +7569,7 @@ static bool8 MovementAction_AcroWheelieJumpRight_Step1(struct ObjectEvent *objec
 {
     if (DoJumpAnim(objectEvent, sprite))
     {
-        objectEvent->hasShadow = FALSE;
+        // objectEvent->hasShadow = FALSE;
         sprite->data[2] = 2;
         return TRUE;
     }
@@ -8289,7 +8289,6 @@ static void GetGroundEffectFlags_Shadow(struct ObjectEvent *objEvent, u32 *flags
     {
         if (!objEvent->hasShadow)
         {
-            objEvent->hasShadow = FALSE;
             objEvent->hasShadow = TRUE;
             *flags |= GROUND_EFFECT_FLAG_SHADOW;
         }
@@ -8705,7 +8704,7 @@ void GroundEffect_Seaweed(struct ObjectEvent *objEvent, struct Sprite *sprite)
 
 void GroundEffect_Shadow(struct ObjectEvent *objEvent, struct Sprite *sprite)
 {
-    StartFieldEffectForObjectEvent(FLDEFF_SHADOW, objEvent);
+    SetUpShadow(objEvent);
 }
 
 static void (*const sGroundEffectFuncs[])(struct ObjectEvent *objEvent, struct Sprite *sprite) = {

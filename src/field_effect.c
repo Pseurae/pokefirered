@@ -3543,6 +3543,7 @@ static void FlyInFieldEffect_BirdSwoopDown(struct Task *task)
         ObjectEventTurn(playerObj, DIR_WEST);
         StartSpriteAnim(&gSprites[playerObj->spriteId], ANIM_GET_ON_OFF_POKEMON_WEST);
         playerObj->invisible = FALSE;
+        playerObj->hasShadow = FALSE;
         task->tBirdSpriteId = CreateFlyBirdSprite();
         StartFlyBirdSwoopDown(task->tBirdSpriteId);
         SetFlyBirdPlayerSpriteId(task->tBirdSpriteId, playerObj->spriteId);
