@@ -5931,7 +5931,7 @@
       "secondaryId": 0
     },
     {
-      "english": "Tri-pass",
+      "english": "Tri-Pass",
       "itemId": "ITEM_TRI_PASS",
       "price": 0,
       "holdEffect": "HOLD_EFFECT_NONE",
@@ -5979,7 +5979,7 @@
       "secondaryId": 0
     },
     {
-      "english": "Mysticticket",
+      "english": "MysticTicket",
       "itemId": "ITEM_MYSTIC_TICKET",
       "price": 0,
       "holdEffect": "HOLD_EFFECT_NONE",
@@ -5995,7 +5995,7 @@
       "secondaryId": 0
     },
     {
-      "english": "Auroraticket",
+      "english": "AuroraTicket",
       "itemId": "ITEM_AURORA_TICKET",
       "price": 0,
       "holdEffect": "HOLD_EFFECT_NONE",

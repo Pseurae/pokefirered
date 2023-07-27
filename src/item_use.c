@@ -69,6 +69,7 @@ static void UseFameCheckerFromBag(void);
 static void Task_UseFameCheckerFromField(u8 taskId);
 static void Task_BattleUse_StatBooster_DelayAndPrint(u8 taskId);
 static void Task_BattleUse_StatBooster_WaitButton_ReturnToBattle(u8 taskId);
+static void Task_UseLinkingCordFromField(u8 taskId);
 
 // unknown unused data.
 // It's curiously about the size of an array of values indexed by species (including padding),
@@ -914,8 +915,28 @@ void FieldUseFunc_OakStopsYou(u8 taskId)
 
 void FieldUseFunc_LinkingCord(u8 taskId)
 {
-    gItemUseCB = ItemUseCB_LinkingCord;
-    DoSetUpItemUseCallback(taskId);
+    if (gTasks[taskId].data[3] == 0)
+    {
+        gItemUseCB = ItemUseCB_LinkingCord;
+        DoSetUpItemUseCallback(taskId);
+    }
+    else
+    {
+        StopPokemonLeagueLightingEffectTask();
+        FadeScreen(FADE_TO_BLACK, 0);
+        gTasks[taskId].func = Task_UseLinkingCordFromField;
+    }
+}
+
+static void Task_UseLinkingCordFromField(u8 taskId)
+{
+    if (!gPaletteFade.active)
+    {
+        CleanupOverworldWindowsAndTilemaps();
+        SetFieldCallback2ForItemUse();
+        InitPartyMenu(PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_USE_ITEM, TRUE, PARTY_MSG_USE_ON_WHICH_MON, Task_HandleChooseMonInput, CB2_ReturnToField);
+        DestroyTask(taskId);
+    }
 }
 
 void ItemUse_SetQuestLogEvent(u8 eventId, struct Pokemon *pokemon, u16 itemId, u16 param)
