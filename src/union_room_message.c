@@ -546,17 +546,17 @@ const u8 *const gTexts_UR_CardColor[] = {
     sText_ItsGoldCard
 };
 
-ALIGNED(4) const u8 gText_UR_TrainerCardInfoPage1[] = _("This is {SPECIAL_F7 0x00} {SPECIAL_F7 0x01}'s\nTrainer Card…\l{SPECIAL_F7 0x02}\pPokédex: {SPECIAL_F7 0x03}\nTime:    {SPECIAL_F7 0x04}:{SPECIAL_F7 0x05}\p");
-ALIGNED(4) const u8 gText_UR_TrainerCardInfoPage2[] = _("Battles: {SPECIAL_F7 0x00} Wins  {SPECIAL_F7 0x02} Losses\nTrades:  {SPECIAL_F7 0x03} Times\p“{SPECIAL_F7 0x04} {SPECIAL_F7 0x05}\n{SPECIAL_F7 0x06} {SPECIAL_F7 0x07}”\p");
-ALIGNED(4) static const u8 sText_GladToMeetYouMale[] = _("{SPECIAL_F7 0x01}: Glad to have met you!{PAUSE 60}");
-ALIGNED(4) static const u8 sText_GladToMeetYouFemale[] = _("{SPECIAL_F7 0x01}: Glad to meet you!{PAUSE 60}");
+ALIGNED(4) const u8 gText_UR_TrainerCardInfoPage1[] = _("This is {DYNAMIC 0} {DYNAMIC 1}'s\nTrainer Card…\l{DYNAMIC 2}\pPokédex: {DYNAMIC 3}\nTime:    {DYNAMIC 4}:{DYNAMIC 5}\p");
+ALIGNED(4) const u8 gText_UR_TrainerCardInfoPage2[] = _("Battles: {DYNAMIC 0x00} Wins  {DYNAMIC 2} Losses\nTrades:  {DYNAMIC 3} Times\p“{DYNAMIC 4} {DYNAMIC 5}\n{DYNAMIC 6} {DYNAMIC 7}”\p");
+ALIGNED(4) static const u8 sText_GladToMeetYouMale[] = _("{DYNAMIC 1}: Glad to have met you!{PAUSE 60}");
+ALIGNED(4) static const u8 sText_GladToMeetYouFemale[] = _("{DYNAMIC 1}: Glad to meet you!{PAUSE 60}");
 
 const u8 *const gTexts_UR_GladToMeetYou[GENDER_COUNT] = {
     sText_GladToMeetYouMale,
     sText_GladToMeetYouFemale
 };
 
-ALIGNED(4) const u8 gText_UR_FinishedCheckingPlayersTrainerCard[] = _("Finished checking {SPECIAL_F7 0x01}'s\nTrainer Card.{PAUSE 60}");
+ALIGNED(4) const u8 gText_UR_FinishedCheckingPlayersTrainerCard[] = _("Finished checking {DYNAMIC 1}'s\nTrainer Card.{PAUSE 60}");
 ALIGNED(4) static const u8 sText_CanceledReadingCard[] = _("Canceled reading the Card.");
 
 static const struct MysteryGiftClientCmd sClientScript_DynamicError[] = {

@@ -451,7 +451,7 @@ gSpecials::
 	def_special InitElevatorFloorSelectMenuPos
 	def_special UpdateLoreleiDollCollection
 	def_special LoopWingFlapSound
-	def_special CreateEventLegalEnemyMon
+	def_special CreateEnemyEventMon
 	def_special CanTradeEvolveMon
 	def_special TryDrawRepelMenu
 gSpecialsEnd::
