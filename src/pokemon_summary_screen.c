@@ -78,8 +78,6 @@ static void HideShowPokerusIcon(u8 invisible);
 static void HideShowShinyStar(u8 invisible);
 static void ShoworHideMoveSelectionCursor(u8 invisible);
 static void PokeSum_ShowOrHideMonIconSprite(u8 invisible);
-static void PokeSum_ShowOrHideSplitIconSprite(u8 invisible);
-static void PokeSum_ChangeSplitIconSprite(u8 split);
 static void PokeSum_Setup_ResetCallbacks(void);
 static void PokeSum_Setup_InitGpu(void);
 static void PokeSum_Setup_SpritesReset(void);
@@ -107,7 +105,6 @@ static void CreateExpBarObjs(u16, u16);
 static void CreateBallIconObj(void);
 static void PokeSum_CreateMonIconSprite(void);
 static void PokeSum_CreateMonPicSprite(void);
-static void PokeSum_CreateSplitIconSprite(void);
 static void Task_InputHandler_SelectOrForgetMove(u8 taskId);
 static void CB2_RunPokemonSummaryScreen(void);
 static void PrintInfoPage(void);
@@ -155,7 +152,6 @@ struct PokemonSummaryScreenData
     u8 ALIGNED(4) ballIconSpriteId;
     u8 ALIGNED(4) monPicSpriteId;
     u8 ALIGNED(4) monIconSpriteId;
-    u8 ALIGNED(4) splitIconSpriteId;
 
     u8 ALIGNED(4) inputHandlerTaskId;
     u8 ALIGNED(4) inhibitPageFlipInput;
@@ -1651,7 +1647,7 @@ static void PokeSum_HideSpritesBeforePageFlip(void)
     case PSS_PAGE_MOVES_INFO:
         ShoworHideMoveSelectionCursor(TRUE);
         PokeSum_ShowOrHideMonIconSprite(TRUE);
-        PokeSum_ShowOrHideSplitIconSprite(TRUE);
+        (TRUE);
         ShowOrHideStatusIcon(TRUE);
         HideShowPokerusIcon(TRUE);
         HideShowShinyStar(TRUE);
@@ -1687,7 +1683,7 @@ static void PokeSum_ShowSpritesBeforePageFlip(void)
             ShoworHideMoveSelectionCursor(FALSE);
             HideShowPokerusIcon(FALSE);
             PokeSum_ShowOrHideMonIconSprite(FALSE);
-            PokeSum_ShowOrHideSplitIconSprite(FALSE);
+            (FALSE);
             HideShowShinyStar(FALSE);
         }
 
@@ -1986,7 +1982,7 @@ static void CB2_SetUpPSS(void)
         if (sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE || sMonSummaryScreen->mode == PSS_MODE_FORGET_MOVE)
         {
             PokeSum_ShowOrHideMonIconSprite(FALSE);
-            PokeSum_ShowOrHideSplitIconSprite(FALSE);
+            (FALSE);
             ShoworHideMoveSelectionCursor(FALSE);
         }
         else
@@ -2345,11 +2341,8 @@ static u8 PokeSum_HandleCreateSprites(void)
     case 8:
         PokeSum_CreateMonIconSprite();
         break;
-    case 9:
-        PokeSum_CreateMonPicSprite();
-        break;
     default:
-        PokeSum_CreateSplitIconSprite();
+        PokeSum_CreateMonPicSprite();
         return TRUE;
     }
 
@@ -2901,13 +2894,7 @@ static void PokeSum_PrintSelectedMoveStats(void)
     if (sMoveSelectionCursorPos < 5)
     {
         if (sMonSummaryScreen->mode != PSS_MODE_SELECT_MOVE && sMoveSelectionCursorPos == 4)
-        {
-            PokeSum_ShowOrHideSplitIconSprite(TRUE);
             return;
-        }
-
-        PokeSum_ShowOrHideSplitIconSprite(FALSE);
-        PokeSum_ChangeSplitIconSprite(sMonSummaryScreen->summary.moveSplits[sMoveSelectionCursorPos]);
 
         AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
                                      57, 1,
@@ -2924,6 +2911,8 @@ static void PokeSum_PrintSelectedMoveStats(void)
                                      0, 0,
                                      sLevelNickTextColors[0], TEXT_SKIP_DRAW,
                                      gMoveDescriptionPointers[sMonSummaryScreen->moveIds[sMoveSelectionCursorPos] - 1]);
+
+        BlitMenuInfoIcon(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], MENU_INFO_CATEGORY_START + sMonSummaryScreen->summary.moveSplits[sMoveSelectionCursorPos], 85, 1);
     }
 }
 
@@ -4232,91 +4221,6 @@ static void PokeSum_DestroyMonIconSprite(void)
     DestroyMonIcon(&gSprites[sMonSummaryScreen->monIconSpriteId]);
 }
 
-static const u16 sSplitIconPal[] = INCBIN_U16("graphics/interface/summary_split_icons.gbapal");
-static const u8 sSplitIconTiles[] = INCBIN_U8("graphics/interface/summary_split_icons.4bpp");
-
-static const struct OamData sSplitIconsOamData =
-{
-    .size = SPRITE_SIZE(16x16),
-    .shape = SPRITE_SHAPE(16x16),
-    .priority = 0,
-};
-
-static const union AnimCmd sSplitIconSpriteAnim0[] =
-{
-    ANIMCMD_FRAME(0, 0),
-    ANIMCMD_END
-};
-
-static const union AnimCmd sSplitIconSpriteAnim1[] =
-{
-    ANIMCMD_FRAME(4, 0),
-    ANIMCMD_END
-};
-
-static const union AnimCmd sSplitIconSpriteAnim2[] =
-{
-    ANIMCMD_FRAME(8, 0),
-    ANIMCMD_END
-};
-
-static const union AnimCmd *const sSplitIconsSpriteAnimTable[] =
-{
-    sSplitIconSpriteAnim0,
-    sSplitIconSpriteAnim1,
-    sSplitIconSpriteAnim2,
-};
-
-static const struct SpriteSheet sSplitIconSpriteSheet = 
-{
-    .data = sSplitIconTiles,
-    .size = 16 * 16 * 3 / 2,
-    .tag = TAG_PSS_UNK_FF
-};
-
-static const struct SpritePalette sSpriteIconSpritePalette = 
-{ 
-    .data = sSplitIconPal, 
-    .tag = TAG_PSS_UNK_FF 
-};
-
-static const struct SpriteTemplate sSpriteIconSpriteTemplate = 
-{
-    .tileTag = TAG_PSS_UNK_FF,
-    .paletteTag = TAG_PSS_UNK_FF,
-    .oam = &sSplitIconsOamData,
-    .anims = sSplitIconsSpriteAnimTable,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = SpriteCallbackDummy,
-};
-
-static void PokeSum_CreateSplitIconSprite(void)
-{
-    LoadSpriteSheet(&sSplitIconSpriteSheet);
-    LoadSpritePalette(&sSpriteIconSpritePalette);
-
-    sMonSummaryScreen->splitIconSpriteId = CreateSprite(&sSpriteIconSpriteTemplate, 100, 63, 0);
-    PokeSum_ShowOrHideSplitIconSprite(TRUE);
-}
-
-static void PokeSum_ShowOrHideSplitIconSprite(bool8 invisible)
-{
-    gSprites[sMonSummaryScreen->splitIconSpriteId].invisible = invisible;
-}
-
-static void PokeSum_ChangeSplitIconSprite(u8 split)
-{
-    StartSpriteAnim(&gSprites[sMonSummaryScreen->splitIconSpriteId], split);
-}
-
-static void PokeSum_DestroySplitIconSprite(void)
-{
-    FreeSpritePaletteByTag(TAG_PSS_UNK_FF);
-    FreeSpriteTilesByTag(TAG_PSS_UNK_FF);
-    DestroySprite(&gSprites[sMonSummaryScreen->splitIconSpriteId]);
-}
-
 static void CreateMoveSelectionCursorObjs(u16 tileTag, u16 palTag)
 {
     u8 i;
@@ -4987,7 +4891,6 @@ static void PokeSum_DestroySprites(void)
     DestroyExpBarObjs();
     PokeSum_DestroyMonPicSprite();
     PokeSum_DestroyMonIconSprite();
-    PokeSum_DestroySplitIconSprite();
     DestroyBallIconObj();
     PokeSum_DestroyMonMarkingsSprite();
     DestroyMonStatusIconObj();
@@ -5002,7 +4905,6 @@ static void PokeSum_CreateSprites(void)
     ShowOrHideBallIconObj(FALSE);
     PokeSum_CreateMonIconSprite();
     PokeSum_CreateMonPicSprite();
-    PokeSum_CreateSplitIconSprite();
     PokeSum_ShowOrHideMonPicSprite(FALSE);
     UpdateHpBarObjs();
     UpdateExpBarObjs();
@@ -5196,7 +5098,6 @@ static void Task_PokeSum_SwitchDisplayedPokemon(u8 taskId)
     case 1:
         PokeSum_DestroyMonPicSprite();
         PokeSum_DestroyMonIconSprite();
-        PokeSum_DestroySplitIconSprite();
         DestroyBallIconObj();
         sMonSummaryScreen->switchMonTaskState++;
         break;

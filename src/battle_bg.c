@@ -6,6 +6,7 @@
 #include "decompress.h"
 #include "graphics.h"
 #include "link.h"
+#include "menu.h"
 #include "new_menu_helpers.h"
 #include "overworld.h"
 #include "text_window.h"
@@ -164,7 +165,7 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .tilemapTop = 35,
         .width = 12,
         .height = 4,
-        .paletteNum = 5,
+        .paletteNum = 1,
         .baseBlock = 0x190
     },
     [B_WIN_MOVE_NAME_1] = {
@@ -173,7 +174,7 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .tilemapTop = 55,
         .width = 8,
         .height = 2,
-        .paletteNum = 5,
+        .paletteNum = 1,
         .baseBlock = 0x300
     },
     [B_WIN_MOVE_NAME_2] = {
@@ -182,7 +183,7 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .tilemapTop = 55,
         .width = 8,
         .height = 2,
-        .paletteNum = 5,
+        .paletteNum = 1,
         .baseBlock = 0x310
     },
     [B_WIN_MOVE_NAME_3] = {
@@ -191,7 +192,7 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .tilemapTop = 57,
         .width = 8,
         .height = 2,
-        .paletteNum = 5,
+        .paletteNum = 1,
         .baseBlock = 0x320
     },
     [B_WIN_MOVE_NAME_4] = {
@@ -200,7 +201,7 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .tilemapTop = 57,
         .width = 8,
         .height = 2,
-        .paletteNum = 5,
+        .paletteNum = 1,
         .baseBlock = 0x330
     },
     [B_WIN_PP] = {
@@ -209,17 +210,26 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .tilemapTop = 55,
         .width = 3,
         .height = 2,
-        .paletteNum = 5,
+        .paletteNum = 1,
         .baseBlock = 0x290
     },
     [B_WIN_MOVE_TYPE] = {
         .bg = 0,
         .tilemapLeft = 21,
         .tilemapTop = 57,
-        .width = 8,
+        .width = 5,
         .height = 2,
-        .paletteNum = 5,
+        .paletteNum = 1,
         .baseBlock = 0x296
+    },
+    [B_WIN_MOVE_CATEGORY] = {
+        .bg = 0,
+        .tilemapLeft = 26,
+        .tilemapTop = 57,
+        .width = 3,
+        .height = 2,
+        .paletteNum = 15,
+        .baseBlock = 0x2a0
     },
     [B_WIN_PP_REMAINING] = {
         .bg = 0,
@@ -365,7 +375,7 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .paletteNum = 7,
         .baseBlock = 0x090
     },
-    DUMMY_WIN_TEMPLATE
+    [B_WIN_MOVE_CATEGORY + 1] = DUMMY_WIN_TEMPLATE
 };
 
 static const u32 sBattleTerrainPalette_Grass[] = INCBIN_U32("graphics/battle_terrain/grass/terrain.gbapal.lz");
@@ -720,6 +730,8 @@ void LoadBattleTextboxAndBackground(void)
     CopyToBgTilemapBuffer(0, gBattleInterface_Textbox_Tilemap, 0, 0x000);
     CopyBgTilemapBufferToVram(0);
     LoadCompressedPalette(gBattleInterface_Textbox_Pal, BG_PLTT_ID(0), 2 * PLTT_SIZE_4BPP);
+    ListMenuLoadStdPalAt(BG_PLTT_ID(14), 0);
+    ListMenuLoadStdPalAt(BG_PLTT_ID(15), 1);
     LoadBattleMenuWindowGfx();
     DrawMainBattleBackground();
 }

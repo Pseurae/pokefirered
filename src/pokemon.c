@@ -2558,10 +2558,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             damage = 1;
     }
 
-    if (type == TYPE_MYSTERY)
+    else if (type == TYPE_MYSTERY)
         damage = 0; // is ??? type. does 0 damage.
 
-    if (IS_MOVE_SPECIAL(gCurrentMove))
+    else if (IS_MOVE_SPECIAL(gCurrentMove))
     {
         if (gCritMultiplier == 2)
         {
