@@ -1004,10 +1004,9 @@ static void BuyMenuTryMakePurchase(u8 taskId)
     PutWindowTilemap(4);
     if (AddBagItem(tItemId, tItemCount) == TRUE)
     {
-        RedrawListMenu(tListTaskId);
+        BuyMenuDisplayMessage(taskId, gText_HereYouGoThankYou, BuyMenuSubtractMoney);
         DebugFunc_PrintPurchaseDetails(taskId);
         RecordItemTransaction(tItemId, tItemCount, QL_EVENT_BOUGHT_ITEM - QL_EVENT_USED_POKEMART);
-        BuyMenuDisplayMessage(taskId, gText_HereYouGoThankYou, BuyMenuSubtractMoney);
     }
     else
     {
