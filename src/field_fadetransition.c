@@ -36,10 +36,10 @@ static void Task_DoorWarp(u8 taskId);
 static void Task_StairWarp(u8 taskId);
 static void ForceStairsMovement(u16 metatileBehavior, s16 *x, s16 *y);
 static void GetStairsMovementDirection(u8 metatileBehavior, s16 *x, s16 *y);
-static void UpdateStairsMovement(s16 speedX, s16 speedY, s16 *offsetX, s16 *offsetY, s16 *timer);
+static void UpdateStairsMovement(s16 speedX, s16 speedY, s16 *offsetX, s16 *offsetY, s16 *timer, s16 *lastX, s16 *lastY);
 static void Task_ExitStairs(u8 taskId);
 static void ExitStairsMovement(s16 *speedX, s16 *speedY, s16 *offsetX, s16 *offsetY, s16 *timer);
-static bool8 WaitStairExitMovementFinished(s16 *speedX, s16 *speedY, s16 *offsetX, s16 *offsetY, s16 *timer);
+static bool8 WaitStairExitMovementFinished(s16 *speedX, s16 *speedY, s16 *offsetX, s16 *offsetY, s16 *timer, s16 *lastX, s16 *lastY);
 
 void palette_bg_faded_fill_white(void)
 {
@@ -818,7 +818,7 @@ static void Task_StairWarp(u8 taskId)
         }
         break;
     case 2:
-        UpdateStairsMovement(data[2], data[3], &data[4], &data[5], &data[6]);
+        UpdateStairsMovement(data[2], data[3], &data[4], &data[5], &data[6], &data[7], &data[8]);
         data[15]++;
         if (data[15] >= 12)
         {
@@ -827,7 +827,7 @@ static void Task_StairWarp(u8 taskId)
         }
         break;
     case 3:
-        UpdateStairsMovement(data[2], data[3], &data[4], &data[5], &data[6]);
+        UpdateStairsMovement(data[2], data[3], &data[4], &data[5], &data[6], &data[7], &data[8]);
         if (!WaitWarpFadeOutScreen() && BGMusicStopped())
             data[0]++;
         break;
@@ -840,7 +840,7 @@ static void Task_StairWarp(u8 taskId)
     }
 }
 
-static void UpdateStairsMovement(s16 speedX, s16 speedY, s16 *offsetX, s16 *offsetY, s16 *timer)
+static void UpdateStairsMovement(s16 speedX, s16 speedY, s16 *offsetX, s16 *offsetY, s16 *timer, s16 *lastX, s16 *lastY)
 {
     struct Sprite *playerSpr = &gSprites[gPlayerAvatar.spriteId];
     struct ObjectEvent *playerObj = &gObjectEvents[gPlayerAvatar.objectEventId];
@@ -848,8 +848,13 @@ static void UpdateStairsMovement(s16 speedX, s16 speedY, s16 *offsetX, s16 *offs
         *offsetY += speedY;
     *offsetX += speedX;
     (*timer)++;
-    playerSpr->x2 = *offsetX >> 5;
-    playerSpr->y2 = *offsetY >> 5;
+
+    playerSpr->x += (*offsetX >> 5) - *lastX;
+    playerSpr->y += (*offsetY >> 5) - *lastY;
+
+    *lastX = *offsetX >> 5;
+    *lastY = *offsetY >> 5;
+
     if (playerObj->heldMovementFinished)
         ObjectEventForceSetHeldMovement(playerObj, GetWalkInPlaceNormalMovementAction(GetPlayerFacingDirection()));
 }
@@ -906,11 +911,12 @@ static void Task_ExitStairs(u8 taskId)
         Overworld_PlaySpecialMapMusic();
         WarpFadeInScreen();
         LockPlayerFieldControls();
+        CameraObjectReset2();
         ExitStairsMovement(&data[1], &data[2], &data[3], &data[4], &data[5]);
         data[0]++;
         break;
     case 1:
-        if (!WaitStairExitMovementFinished(&data[1], &data[2], &data[3], &data[4], &data[5]))
+        if (!WaitStairExitMovementFinished(&data[1], &data[2], &data[3], &data[4], &data[5], &data[6], &data[7]))
             data[0]++;
         break;
     }
@@ -934,13 +940,13 @@ static void ExitStairsMovement(s16 *speedX, s16 *speedY, s16 *offsetX, s16 *offs
     *offsetY = *speedY * 16;
     *timer = 16;
     sprite = &gSprites[gPlayerAvatar.spriteId];
-    sprite->x2 = *offsetX >> 5;
-    sprite->y2 = *offsetY >> 5;
+    // sprite->x2 = *offsetX >> 5;
+    // sprite->y2 = *offsetY >> 5;
     *speedX *= -1;
     *speedY *= -1;
 }
 
-static bool8 WaitStairExitMovementFinished(s16 *speedX, s16 *speedY, s16 *offsetX, s16 *offsetY, s16 *timer)
+static bool8 WaitStairExitMovementFinished(s16 *speedX, s16 *speedY, s16 *offsetX, s16 *offsetY, s16 *timer, s16 *lastX, s16 *lastY)
 {
     struct Sprite *sprite;
     sprite = &gSprites[gPlayerAvatar.spriteId];
@@ -948,8 +954,12 @@ static bool8 WaitStairExitMovementFinished(s16 *speedX, s16 *speedY, s16 *offset
     {
         *offsetX += *speedX;
         *offsetY += *speedY;
-        sprite->x2 = *offsetX >> 5;
-        sprite->y2 = *offsetY >> 5;
+
+        sprite->x += (*offsetX >> 5) - *lastX;
+        sprite->y += (*offsetY >> 5) - *lastY;
+
+        *lastX = *offsetX >> 5;
+        *lastY = *offsetY >> 5;
         (*timer)--;
         return TRUE;
     }
